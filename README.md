@@ -26,6 +26,7 @@ flutter run | grep -v "app_time_stats"
 [• equatable](https://pub.dev/packages/equatable)
 [• go_router](https://pub.dev/packages/go_router)
 [• flutter_bloc](https://pub.dev/packages/flutter_bloc)
+[• FlutterFire](https://firebase.flutter.dev/docs/messaging/overview)
 
 
 <br/><hr/>
@@ -37,6 +38,14 @@ flutter run | grep -v "app_time_stats"
 <br/><hr/>
 
 ## Others
+
+<details><summary>Bash Commands</summary>
+
+```bash
+# initialize Firebase
+flutter pub add firebase_messaging
+```
+</details>
 
 <details><summary>Documentation</summary>
 <ul>
