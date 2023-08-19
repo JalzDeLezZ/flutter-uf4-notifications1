@@ -1,10 +1,13 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:push_app/domain/entities/push_message.dart';
 import 'package:push_app/firebase_options.dart';
 
 part 'notifications_event.dart';
@@ -23,6 +26,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   NotificationsBloc() : super(const NotificationsState()) {
     on<NotificationStatusChanged>(_notificationStatusChanges);
+    on<NotificationRecieved>(_onPushMessageReviebed);
 
     // verify if the app was opened by a notification
     _initialStatusCheck();
@@ -36,9 +40,16 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     );
   }
 
-  void _notificationStatusChanges(event, emit) {
+  void _notificationStatusChanges(
+      NotificationStatusChanged event, Emitter<NotificationsState> emit) {
     emit(state.copyWith(status: event.status));
     _getFCMToken();
+  }
+
+  void _onPushMessageReviebed(
+      NotificationRecieved event, Emitter<NotificationsState> emit) {
+    emit(state
+        .copyWith(notifications: [event.pushMessage, ...state.notifications]));
   }
 
   void _initialStatusCheck() async {
@@ -47,9 +58,11 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   }
 
   void _getFCMToken() async {
-    final settings = await messaging.getNotificationSettings();
+    //? 1st final settings = await messaging.getNotificationSettings();
+    //? 1st if (settings.authorizationStatus != AuthorizationStatus.authorized) return;
+    //* 2nd
     if (state.status != AuthorizationStatus.authorized) return;
-    // if (settings.authorizationStatus != AuthorizationStatus.authorized) return;
+
     final token = await messaging.getToken();
     print('FCM Token: $token');
   }
@@ -61,6 +74,22 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     if (message.notification == null) return;
 
     print('Message also contained a notification: ${message.notification}');
+
+    final notification = PushMessage(
+      messageId:
+          message.messageId?.replaceAll(':', '').replaceAll('%', '') ?? '',
+      title: message.notification?.title ?? '',
+      body: message.notification?.body ?? '',
+      sentDate: message.sentTime ?? DateTime.now(),
+      data: message.data,
+      imageUrl: Platform.isAndroid
+          ? message.notification?.android?.imageUrl
+          : message.notification?.apple?.imageUrl,
+    );
+
+    print(notification.toString());
+
+    add(NotificationRecieved(notification));
   }
 
   void _onForegroundMessage() {
