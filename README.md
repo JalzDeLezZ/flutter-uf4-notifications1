@@ -54,6 +54,9 @@ firebase login
 firebase projects:list
 firebase logout
 
+# Delete last push
+$ git reset --hard HEAD~1 || git reset --hard HEAD^
+$ git push -f origin <branch_name>
 ```
 </details>
 
@@ -63,10 +66,13 @@ firebase logout
   <li><a href="https://devtalles.com/files/flutter-cheat-sheet.pdf" target="_blank">Notes Flutter</a></li>
   <li><a href="https://pub.dev/packages/shared_preferences" target="_blank">Storage</a></li>
   <li><a href="https://isar.dev/es/" target="_blank">Isar DB</a></li>
+  <!-- Proyect -->
   <li><a href="https://firebase.google.com/docs/cli?hl=es-419#windows-npm" target="_blank">Firebase CLI</a></li>
   <li><a href="https://firebase.flutter.dev/docs/overview" target="_blank">Integrate FlutterFire</a></li>
-  <li><a href="https://firebase.flutter.dev/docs/overview" target="_blank">Integrate FlutterFire</a></li>
+  <li><a href="https://firebase.flutter.dev/docs/messaging/overview" target="_blank">Firebase messaging</a></li>
   <li><a href="https://firebase.flutter.dev/docs/messaging/permissions" target="_blank">Cloud Messaging</a></li>
+  
+  <li><a href="https://firebase.flutter.dev/docs/messaging/usage/#background-messages" target="_blank">Execution in Background</a></li>
 </ul>
 </details><br/>
 
